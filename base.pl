@@ -1,14 +1,34 @@
-
 %% Object Declaration (problem-specific)
-block(B) :- member(B,[a,b,c,d]).
+block(B) :- member(B,[a,b,c,d,e,f,g]).
 
-% colors available for rob and bor
-color(rob,B) :- member(B,[blue]).
-color(bor,B) :- member(B,[red]).
+color(rob, B) :- member(B, [blue]).
+color(bor, B) :- member(B, [red]).
 
 %% Initial Situation (problem-specific)
-holds(F,s0) :- member(F,[on(a,b),on(b,c),ontable(c), ontable(d), clear(a), clear(d)]).
+holds(F,s0) :- member(F,[clear(a),on(a,b),on(b,c),ontable(c),ontable(d),on(e,d),on(f,e),clear(f),ontable(g),clear(g)]).
 holds(color(B,white),s0) :- block(B).
+
+%% %% Object Declaration (problem-specific)
+%% block(B) :- member(B,[a,b,c,d]).
+
+%% % colors available for rob and bor
+%% color(rob,B) :- member(B,[blue]).
+%% color(bor,B) :- member(B,[red]).
+
+%% %% Initial Situation (problem-specific)
+%% holds(F,s0) :- member(F,[on(a,b),on(b,c),ontable(c), ontable(d), clear(a), clear(d)]).
+%% holds(color(B,white),s0) :- block(B).
+
+
+poss(move_to_block(X,Z),S) :-
+    holds(clear(X),S),
+    holds(clear(Z),S),
+    X\=Z
+.
+
+poss(move_to_table(X),S) :-
+    holds(clear(X),S),
+    \+ holds(ontable(X),S).
 
 poss(paint(rob,B,C),S) :-
     color(rob,C),
@@ -22,15 +42,7 @@ poss(paint(bor,B,C),S) :-
 
 %% Blocks World Preconditions (domain-specific)
 %% action move_to_block(X,Z) moves block X on top of block Z
-poss(move_to_block(X,Z),S) :-
-    holds(clear(X),S),
-    holds(clear(Z),S),
-    X\=Z
-.
 
-poss(move_to_table(X),S) :-
-    holds(clear(X),S),
-    \+ holds(ontable(X),S).
 
 %% Blocks World Effects (domain-specific)
 % is_conditional_negative_effect(Act,Cond,Fact)
