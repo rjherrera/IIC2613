@@ -11,20 +11,21 @@ holds(F,s0) :- member(F,[on(a,b),on(b,c),ontable(c), ontable(d), clear(a), clear
 holds(color(B,white),s0) :- block(B).
 
 poss(paint(rob,B,C),S) :-
-    color(rob,C)
-    %complete
+    color(rob,C),
+    holds(clear(B), S)
 .
 
 poss(paint(bor,B,C),S) :-
     color(bor,C),
-    %complete
+    holds(ontable(B), S)
 .
 
 %% Blocks World Preconditions (domain-specific)
 %% action move_to_block(X,Z) moves block X on top of block Z
 poss(move_to_block(X,Z),S) :-
     holds(clear(X),S),
-    %complete
+    holds(clear(Z),S),
+    X\=Z
 .
 
 poss(move_to_table(X),S) :-
@@ -34,18 +35,29 @@ poss(move_to_table(X),S) :-
 %% Blocks World Effects (domain-specific)
 % is_conditional_negative_effect(Act,Cond,Fact)
 % when Act is peformed and Cond holds, Fact becomes false
-
-is_conditional_negative_effect(move_to_block(X,_),on(X,Y),on(X,Y)).
-is_conditional_negative_effect(move_to_block(X,_),ontable(X),ontable(X)).
-is_conditional_negative_effect(move_to_block(X,Z),true,clear(Z)).
-
 % is_conditional_positive_effect(Act,Cond,Fact)
 % when Act is peformed and Cond holds, Fact becomes true
 
-% COMPLETE is_conditional_positive_effect para accion move_to_table
+% block
+is_conditional_negative_effect(move_to_block(X, _),on(X, Y),on(X, Y)).
+is_conditional_negative_effect(move_to_block(X, _),ontable(X),ontable(X)).
+is_conditional_negative_effect(move_to_block(_, Z),true,clear(Z)).
+% table
+is_conditional_negative_effect(move_to_table(X), on(X, Y), on(X, Y)).
+% paint
+is_conditional_negative_effect(paint(_, B, _), true, color(B, white)).
 
-% COMPLETE is_conditional_negative_effect e
-% is_conditional_positive_effect para acción move_to_table
+
+% block
+is_conditional_positive_effect(move_to_block(X, Z), true, on(X, Z)).
+is_conditional_positive_effect(move_to_block(X, _), on(X, Y), clear(Y)).
+% table
+is_conditional_positive_effect(move_to_table(X), on(X, Y), clear(Y)).
+is_conditional_positive_effect(move_to_table(X), true, ontable(X)).
+% paint
+is_conditional_positive_effect(paint(_, B, C), true, color(B, C)).
+
+
 
 holds(true,s0). % "true" always holds
 
@@ -72,13 +84,15 @@ uncontrollable(A) :- member(A,[paint(bor,_,_)]).
 
 % possAll(Action,SituationSet)
 % is true when poss(Action,S) holds for every S in SituationSet
-
-% COMPLETE definicion possAll(Action,S)
+%% possAll(Action, SitSet):- findall(S, poss(Action,S), SitSet).
+possAll(_, []).
+possAll(Action, [S|R]):- poss(Action, S), possAll(Action, R).
 
 % holdsAll(F,SituationSet)
 % is true when holds(F,S) is true for every S in Situation Set
-
-% COMPLETE definicion de holdsAll
+%% holdsAll(F, SitSet):- findall(S, holds(F, S), SitSet).
+holdsAll(_, []).
+holdsAll(F, [S|R]):- holds(F, S), holdsAll(F, R).
 
 
 % turn(agent, Actions, NewActions, SitSet, NewSitSet)
@@ -86,21 +100,31 @@ uncontrollable(A) :- member(A,[paint(bor,_,_)]).
 % applying the actions Actions in s0. It is true if there
 % is a single action A that is possible in all situations SitSet
 % NewSitSet contains the situations of the form do(A,S) for every
-% S in SitSet. 
+% S in SitSet.
 
-turn(agent,Actions,NewActions,SitSet,SitSet2) :-
-    %COMPLETE
+turn(agent,Actions,NewActions,SitSet,SitSet2):-
+    possAll(A, SitSet),
+    controllable(A),
+    findall(do(A, S),
+            member(S, SitSet),
+            SitSet2),
+    append(Actions, [A], NewActions).
 
 % turn(env,SitSet,SitSet2)
 % SitSet2 c
 turn(env,SitSet,SitSet2) :-
-    %COMPLETE
+    findall(do(A, S),
+            (possAll(A, SitSet),uncontrollable(A),member(S, SitSet)),
+            SitSetWithAction),
+    %append because env may do nothing.
+    append(SitSet, SitSetWithAction, SitSet2)
+.
 
 plies([],[s0]).
 plies(Actions,SitSet) :-
     plies(Acts,SS),
     turn(agent,Acts,Actions,SS,SitSetp),
-    %COMPLETE
-
+    turn(env, SitSetp, SitSet)
+.
 
 
