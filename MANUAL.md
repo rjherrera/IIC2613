@@ -12,7 +12,7 @@ Se incluye a continuación descripciones para conocer la utilidad de los archivo
 
     **IMPORTANTE**: el archivo 'pasillos.txt' no debe estár en la carpeta 'datasets' (o en su defecto cualquier archivo que no sean los directorios e imágenes dentro de ellos).
 
-* En segundo lugar, para entrenar se debe incluir bajo la carpeta [dataset](dataset) todas las imagenes ordenadas como fueron entregadas. El nombre de la carpeta ha de ser `dataset`, las subcarpetas deben permanecer igual.
+* En segundo lugar, para entrenar se debe incluir bajo la carpeta [dataset](dataset) todas las imagenes ordenadas como fueron entregadas. El nombre de la carpeta ha de ser `dataset` en la raíz, las subcarpetas deben permanecer igual. El link para descargar el dataset exacto utilizado está en drive [dataset.zip](https://drive.google.com/file/d/1_0qAwVzN7fXdaISKlUxJgzvCDP9JTFSc/view?usp=sharing) y basta con descomprimirlo en la raíz del repositorio.
 
 * En tercer lugar, para entrenar se incluyen los scripts del modelo utilizado, que es el basado en estos dos tutoriales: [How to Retrain Inception's Final Layer for New Categories](https://www.tensorflow.org/tutorials/image_retraining) y [TensorFlow For Poets](https://codelabs.developers.google.com/codelabs/tensorflow-for-poets/). Esto se hace bajo la carpeta [classifier](classifier). Ahí se encuentran los archivos principales. Se deben utilizar para reentrenar la red y/o para clasificar imágenes de a una, sin embargo, como en la raíz se incluye otro programa que se aprovecha de los archivos, estos no deberían tocarse.
 
@@ -26,7 +26,7 @@ Se incluye a continuación descripciones para conocer la utilidad de los archivo
 
     Donde `-hf` es el shortcut para `--hallway_file` correspondiente al archivo de input descrito anteriormente, es obligatirio. Luego `-nc` es el shortcut para `--n_classes` correspondiente a la cantidad de clases que se desean mostrar en el momento de clasificar una imagen, es opcional, y por defecto se muestran 3 con su porcentaje de certeza respectivo. Finalmente `-sd` es el shortcut para `--show_distance` correspondiente a si se desea mostrar la distancia _minkowski_ existente entre el vector a predecir y el elegido como vecino más cercano al realizar el KNN, es opcional, por defecto no se muestra.
 
-* En sexto lugar, bajo la carpeta [classifier_files](classifier_files) se incluyen los datos del modelo una vez entrenado. Se omiten (en el .gitignore) muchos de los archivos generados en esta carpeta, y solo se incluyen los archivos principales del modelo entrenado: [retrained_graph](classifier_files/retrained_graph.pb) y [retrained_labels](classifier_files/retrained_labels.txt).
+* En sexto lugar, bajo la carpeta [classifier_files](classifier_files) se incluyen los datos del modelo una vez entrenado. Se omiten (en el .gitignore) muchos de los archivos generados en esta carpeta, y solo se incluyen los archivos principales del modelo entrenado: [retrained_graph](classifier_files/retrained_graph.pb) (usando git LFS) que es el archivo que guarda el modelo en sí, y es utilizado para las predicciones, y [retrained_labels](classifier_files/retrained_labels.txt) que tiene los nombres de las clases, es decir los nombres de las carpetas.
 
 * En séptimo lugar se incluyen unos pocos archivos para hacer testeo del programa:
     * [final_test](final_test.txt): archivo para ser utilizado como _input_file_ del archivo principal

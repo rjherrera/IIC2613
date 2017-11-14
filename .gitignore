@@ -6,5 +6,6 @@ __pycache__
 # project-specific
 bottlenecks
 models
-dataset
 training_summaries
+dataset
+dataset.zip
