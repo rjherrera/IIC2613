@@ -8,7 +8,7 @@
 
 Se incluye a continuación descripciones para conocer la utilidad de los archivos/directorios incluidos:
 
-* En primer lugar se amplió el set de datos con el objetivo de tener una mayor variedad de imágenes por clase. También, para poder subsanar un requerimiento de parte del código utilizado, el cual consistía en tener al menos un número similar a 40 fotos por clase. Para la ampliación se utilizó el script [duplicator](duplicator.py), el cual utilizando la librería Pillow entrega, por cada imagen del set de datos, 5 imágenes nuevas, que consisten en modificaciones al contraste de las mismas, para simular distintas condiciones de luminosidad.
+* En primer lugar se amplió el set de datos con el objetivo de tener una mayor variedad de imágenes por clase. También, para poder subsanar un requerimiento de parte del código utilizado, el cual consistía en tener al menos un número similar a 40 fotos por clase. Para la ampliación se utilizó el script [duplicator](duplicator.py), el cual utilizando la librería Pillow entrega, por cada imagen del set de datos, 5 imágenes nuevas, que consisten en modificaciones al contraste de las mismas, para simular distintas condiciones de luminosidad. Para ejecutarlo basta con ejecutar `python3 duplicator.py` en consola.
 
     **IMPORTANTE**: el archivo 'pasillos.txt' no debe estár en la carpeta 'datasets' (o en su defecto cualquier archivo que no sean los directorios e imágenes dentro de ellos).
 
@@ -37,6 +37,24 @@ Se incluye a continuación descripciones para conocer la utilidad de los archivo
 
 ## Decisiones de diseño
 
+
+## Reentrenar
+
+Para reentrenar basta con ubicarse en la raíz del repositorio y ejecutar:
+
+```bash
+python3 -m classifier.retrain  --bottleneck_dir=classifier_files/bottlenecks --model_dir=classifier_files/models/ --summaries_dir=classifier_files/training_summaries/inceptionv3 --output_graph=classifier_files/retrained_graph.pb --output_labels=classifier_files/retrained_labels.txt --image_dir=dataset
+```
+
+Considerando que los archivos generados no serán commiteados al repositorio, excepto los dos importantes, de los cuales 1 será manejado por git LFS. Es importante ya haber obtenido el dataset del link provisto anteriormente.
+
+## Librerías requeridas
+
+* TensorFlow
+* Pillow
+* Numpy
+* Scikit-learn
+* Scipy
 
 
 
