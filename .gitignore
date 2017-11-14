@@ -1,3 +1,10 @@
+# common trash
 *.DS_Store
 .DS_Store
 __pycache__
+
+# project-specific
+bottlenecks
+models
+dataset
+training_summaries
