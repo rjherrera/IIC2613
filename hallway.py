@@ -4,7 +4,8 @@ import os
 with open('pasillos.txt') as f:
     hallways = [[j[0], [k.lower() for k in j[1].split(',')]] for j in [i.strip().split(':') for i in f.readlines()]]
 
-clases = [i.lower() for i in os.listdir('dataset') if i != '.DS_Store']
+with open('classifier_files/retrained_labels.txt') as f:
+    clases = [i.strip() for i in f]
 
 for i in range(len(hallways)):
     hallways[i].append(list(map(lambda x: 1 if x in hallways[i][1] else 0, clases)))
