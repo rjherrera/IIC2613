@@ -2,6 +2,13 @@
 
 **Raimundo Herrera Sufán - 14632152**
 
+# Tabla de contenidos
+1. [Archivos incluidos](#archivos-incluidos)
+2. [Decisiones de diseño](#decisiones-de-diseño)
+3. [Reentrenamiento](#reentrenamiento)
+4. [Clasificación por imagen](#clasificación-por-imagen)
+5. [Librerías requeridas](#librerías-requeridas)
+
 ---
 
 ## Archivos incluidos
@@ -38,7 +45,7 @@ Se incluye a continuación descripciones para conocer la utilidad de los archivo
 ## Decisiones de diseño
 
 
-## Reentrenar
+## Reentrenamiento
 
 Para reentrenar basta con ubicarse en la raíz del repositorio y ejecutar:
 
@@ -48,6 +55,16 @@ python3 -m classifier.retrain  --bottleneck_dir=classifier_files/bottlenecks --m
 
 Considerando que los archivos generados no serán commiteados al repositorio, excepto los dos importantes, de los cuales 1 será manejado por git LFS. Es importante ya haber obtenido el dataset del link provisto anteriormente.
 
+## Clasificación por imagen
+
+Para poder clasificar una imagen en alguna de las clases, sin tener que pasarle al programa principal un archivo con pasillos, es posible utilizar uno de los scripts incluidos en la carpeta anteriormente mencionada, para esto basta con estar en la raíz y ejecutar:
+
+```bash
+python3 -m classifier.label_image --graph=classifier_files/retrained_graph.pb --labels=classifier_files/retrained_labels.txt --input_layer="Mul" --input_width=299 --input_height=299 --image=<image_to_classify>
+```
+
+Donde basta con reemplazar `<image_to_classify>` por la imagen deseada para ver su categorización.
+
 ## Librerías requeridas
 
 * TensorFlow
@@ -56,6 +73,6 @@ Considerando que los archivos generados no serán commiteados al repositorio, ex
 * Scikit-learn
 * Scipy
 
-
+Se incluye un archivo [requirements](requirements.txt) consistente con el virtual env utilizado para el desarrollo de la tarea.
 
 
