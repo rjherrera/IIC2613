@@ -3,13 +3,24 @@
 **Raimundo Herrera Sufán - 14632152**
 
 # Tabla de contenidos
-1. [Archivos incluidos](#archivos-incluidos)
-2. [Decisiones de diseño](#decisiones-de-diseño)
-3. [Reentrenamiento](#reentrenamiento)
-4. [Clasificación por imagen](#clasificación-por-imagen)
-5. [Librerías requeridas](#librerías-requeridas)
+1. [Uso rápido](#uso-rápido)
+2. [Archivos incluidos](#archivos-incluidos)
+3. [Decisiones de diseño](#decisiones-de-diseño)
+4. [Reentrenamiento](#reentrenamiento)
+5. [Clasificación por imagen](#clasificación-por-imagen)
+6. [Librerías requeridas](#librerías-requeridas)
 
 ---
+
+## Uso rápido
+
+Para ejecutar un testeo rápido del programa en cuestión (con las libreras especificadas en la sección [Librerías requeridas](#librerías-requeridas), basta con ejecutar:
+
+```bash
+python3 main.py -hf final_test.txt -nc 1
+```
+
+Más detalle sobre lo que significan los parámetros y archivos de la tarea en la siguiente sección, de modo que el uso de [main](main.py) también se explica con más detenimiento.
 
 ## Archivos incluidos
 
@@ -37,13 +48,30 @@ Se incluye a continuación descripciones para conocer la utilidad de los archivo
 
 * En séptimo lugar se incluyen unos pocos archivos para hacer testeo del programa:
     * [final_test](final_test.txt): archivo para ser utilizado como _input_file_ del archivo principal
-    * [test_files](test_files): imágenes externas al dataset en la carpeta misma, e imágenes sacadas del dataset bajo las subcarpetas [pasillo0](test_files/pasillo0) y [pasillo1](test_files/pasillo0), para tener coherencia con el archivo de input mencionado.
+    * [test_files](test_files): imágenes externas al dataset en la carpeta misma, e imágenes sacadas del dataset bajo las subcarpetas [pasillo0](test_files/pasillo0) y [pasillo1](test_files/pasillo1), para tener coherencia con el archivo de input mencionado.
 
-* Como extra, se incluye el archivo [retrain_stdout](retrain_stdout.txt) para tener registro de como se entrenó la red, y los scores tanto de los crossvalidation y entropy por step, como del accuracy final.
+* Como extra, se incluye el archivo [retrain_stdout](retrain_stdout.txt) para tener registro de como se entrenó la red, y los scores tanto de los crossvalidation y entropy por step, como del accuracy final (al final del archivo).
 
 
 ## Decisiones de diseño
 
+A la hora de optar por que utilizar en esta tarea, decidí investigar sobre cuales eran los mejores rendimientos en clasificación de imágenes, y cuales eran los sistemas ms robustos existentes. Un amigo había preguntado en clases al profesor si se podía utilizar Transfer Learning, y ante su afirmativa respuesta decidí, cuando me salieron positivas respuestas sobre eso en mi búsqueda, que era una buena opción a analizar.
+
+La base de la decisión es que los modelos realmente robustos de clasificación de imágenes toman mucho tiempo de entrenamiento y ya han sido entrenados por otras personas, como es este caso utilizando sets de categorías como ImageNet. Con la técnica de Transfer Learning, se puede aprovechar eso y modificar únicamente los parámetros deseados ya que se entrena únicamente la última capa, sin modificar nada de lo anterior. El modelo de entrenamiento en el que se basa el sistema escogido es InceptionV3 [(referencia)](https://www.tensorflow.org/tutorials/image_recognition), el cual, a grandes rasgos consiste de una red neuronal profunda de tipo convolucional (_deep cnn_), validada contra el set de categorías mencionado anteriormente.
+
+La razón por la cual Transfer Learning funciona, en términos simples, es porque es muy probable que la información obtenida al entrenar una red para clasificar entre más de 1000 categorías es normalmente útil para nuevos tipos de objetos a clasificar, por lo que con reentrenar la última capa normalmente se obtienen buenos resultados. Se entrena por medio de la creación de _bottlenecks_, los cuales corresponden a los parámetros de la penúltima capa para cada imagen.
+
+Para evitar _overfitting_, el programa utilizado, basado en el link provisto anteriormente [TensorFlow For Poets](https://codelabs.developers.google.com/codelabs/tensorflow-for-poets/), realiza _crossvalidation_ y realiza 4000 pasos para entrenar la última capa, tomando en cada uno de ellos aleatoriamente 10 imagenes y comparando la predicción del modelo sobre ellas con el etiquetado real, para así actualizar por _backpropagation_ los pesos de la última capa, obteniendo también así los scores para cada paso, mejorando sustancialmente cada iteración. Este método de evaluación, se dice en la documentación, es de lo mejor en cuanto a una predicción de los resultados reales que tendrá el modelo.
+
+Como se recomienda en los tutoriales realizados, cambié tanto el modelo en el cual basarme, como ciertos parámetros para el reentrenamiento. El primer modelo probado fue el de MobileNet y con 500 pasos, este era el setup recomendado para un análisis lightweight del problema, sin embargo, si bien los resultados eran buenos, no eran tan buenos como se podía esperar de un modelo tan robusto. También se probó con otros steps, el recomendado de 4000, y con otro modelo, con varios steps. Finalmente se optó por el que obtena mejor rendimiento, InceptionV3 con 4000 steps (el recomendado por el tutorial). Además se optó por el mismo ya que fue el único que fue capaz de clasificar correctamente imagenes de Google como las provistas en la carpeta [test_files](test_files), donde destaca el caso del [arroz líder](test_files/arroz_lider.jpg) ya que siendo un elemento con colores distintos y bastante diferente de los arroces presentes en el dataset, es capaz de catalogarlo correctamente (aún cuando la seguridad del clasificador sea bastante poca.
+
+El accuracy total obtenido tras reentrenar la red con las categorías de la tarea, es de un 99.1%.
+
+Para la parte final, es decir la de la clasificación en pasillos, se optó por conectar el modelo anterior con un clasificador no supervisado, el KNN. Lo que se hizo a grandes rasgos es clasificar cada imagen de las entregadas como input en una categora, y con esto, entregar un input al KNN para que este decidiera, en base a los pasillos entregados en el archivo [pasillos.txt](pasillos.txt), determinara cual es el mejor fit para dicho "candidato a pasillo". 
+
+El KNN se configuró simplemente entregándole un vector por cada fila del documento, donde el vector tiene 71 entradas, correspondientes a los 71 tipos de alimentos (arroz1, aceite4, etc.), y cada entrada representa si ese alimento está en esa fila (que representa un pasillo) o no, con un 1 en el caso de estar y un 0 en caso contrario. Esos 55 vectores son bastante sparse, ya que cuentan con alrededor de 6 valores positivos (1) y por ende alrededor 65 negativos (0).
+
+Para clasificar se realiza la misma transformación para este candidato a pasillo (siendo cada elemento de esta "fila" la predicción del modelo anterior), y se _fittea_ al modelo KNN, de modo que entregue un resultado, que es un pasillo que tiene la distancia _minkowskiana_ mínima a un pasillo real representado por el tranining-set del modelo. La distancia de _Minkowski_ suele ser una mejor medida cuando se habla de una métrica usada en espacios de mayor dimensión, y constituye de cierto modo una generalización entre distancia _Manhattan_ y _Euclideana_.
 
 ## Reentrenamiento
 
