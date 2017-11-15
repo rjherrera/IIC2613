@@ -47,8 +47,8 @@ Se incluye a continuación descripciones para conocer la utilidad de los archivo
 * En sexto lugar, bajo la carpeta [classifier_files](classifier_files) se incluyen los datos del modelo una vez entrenado. Se omiten (en el .gitignore) muchos de los archivos generados en esta carpeta, y solo se incluyen los archivos principales del modelo entrenado: [retrained_graph](classifier_files/retrained_graph.pb) (usando git LFS) que es el archivo que guarda el modelo en sí, y es utilizado para las predicciones, y [retrained_labels](classifier_files/retrained_labels.txt) que tiene los nombres de las clases, es decir los nombres de las carpetas.
 
 * En séptimo lugar se incluyen unos pocos archivos para hacer testeo del programa:
-    * [final_test](final_test.txt): archivo para ser utilizado como _input_file_ del archivo principal
-    * [test_files](test_files): imágenes externas al dataset en la carpeta misma, e imágenes sacadas del dataset bajo las subcarpetas [pasillo0](test_files/pasillo0) y [pasillo1](test_files/pasillo1), para tener coherencia con el archivo de input mencionado.
+    * [final_test](final_test.txt): archivo para ser utilizado como _input_file_ del archivo principal.
+    * [test_files](test_files): imágenes externas al dataset en la carpeta misma, e imágenes sacadas del dataset bajo las subcarpetas [pasillo0](test_files/pasillo0) y [pasillo2](test_files/pasillo2), para tener coherencia con el archivo de input mencionado.
 
 * Como extra, se incluye el archivo [retrain_stdout](retrain_stdout.txt) para tener registro de como se entrenó la red, y los scores tanto de los crossvalidation y entropy por step, como del accuracy final (al final del archivo).
 
@@ -67,7 +67,7 @@ Como se recomienda en los tutoriales realizados, cambié tanto el modelo en el c
 
 El accuracy total obtenido tras reentrenar la red con las categorías de la tarea, es de un 99.1%.
 
-Para la parte final, es decir la de la clasificación en pasillos, se optó por conectar el modelo anterior con un clasificador no supervisado, el KNN. Lo que se hizo a grandes rasgos es clasificar cada imagen de las entregadas como input en una categora, y con esto, entregar un input al KNN para que este decidiera, en base a los pasillos entregados en el archivo [pasillos.txt](pasillos.txt), determinara cual es el mejor fit para dicho "candidato a pasillo". 
+Para la parte final, es decir la de la clasificación en pasillos, se optó por conectar el modelo anterior con un clasificador no supervisado, el KNN. Lo que se hizo a grandes rasgos es clasificar cada imagen de las entregadas como input en una categora, y con esto, entregar un input al KNN para que este decidiera, en base a los pasillos entregados en el archivo [pasillos.txt](pasillos.txt), determinara cual es el mejor fit para dicho "candidato a pasillo".
 
 El KNN se configuró simplemente entregándole un vector por cada fila del documento, donde el vector tiene 71 entradas, correspondientes a los 71 tipos de alimentos (arroz1, aceite4, etc.), y cada entrada representa si ese alimento está en esa fila (que representa un pasillo) o no, con un 1 en el caso de estar y un 0 en caso contrario. Esos 55 vectores son bastante sparse, ya que cuentan con alrededor de 6 valores positivos (1) y por ende alrededor 65 negativos (0).
 

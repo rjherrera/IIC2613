@@ -1,2 +1,2 @@
 test_files/pasillo0/24.png,test_files/pasillo0/306_0.png,test_files/pasillo0/3490.png,test_files/pasillo0/3_1.png,test_files/pasillo0/710_1.png
-test_files/pasillo0/306_0.png,test_files/pasillo0/3490.png,test_files/pasillo0/3_1.png,test_files/pasillo0/710_1.png
+test_files/pasillo2/arroz_lider.jpg,test_files/pasillo2/cereal_bar.jpg,test_files/pasillo2/1915.png,test_files/pasillo2/1944.png
