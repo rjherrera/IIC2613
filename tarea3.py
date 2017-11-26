@@ -1,5 +1,6 @@
 from argparse import ArgumentParser
 from graph import ComputationalGraph
+from utils import *
 import numpy as np
 import os
 
@@ -37,6 +38,11 @@ if __name__ == '__main__':
     w = np.ones(int(dimensions))
     b = 1.
 
+    logger.LOG_LEVEL = ERROR  # DEBUG, INFO, ERROR
+
     cg = ComputationalGraph()
-    cg.gradient_descent(w, X, y, b, _lambda, alpha, int(mb_size), int(epochs))
+    result, output_w, output_b = cg.gradient_descent(w, X, y, b, _lambda, alpha, int(mb_size), int(epochs))
+
+    log('\nFinal:', result, level=ERROR)
+    log('\tw: %r\n\tb: %r' % (list(output_w), output_b), level=ERROR)
 
