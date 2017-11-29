@@ -66,7 +66,7 @@ class MaxGate(Gate):
         return self.z
 
     def backward(self):
-        self.x.grad += 0 if self.x.value < 0 else self.x.value * self.z.grad
+        self.x.grad += 0 if self.x.value < 0 else self.z.grad
 
 
 class DotProductGate(Gate):
