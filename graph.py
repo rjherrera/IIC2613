@@ -176,10 +176,10 @@ def objective_function(w, b, X, y, _lambda):
 
 
 if __name__ == '__main__':
-    w = np.array([1., 1.])
+    w = np.array(np.random.randn(2))
     X = np.array([[1., 1.], [2., 1], [1., 2.], [3., 3.], [3., 4.], [4., 3.]])
     y = np.array([-1., -1., -1., 1., 1., 1.])
-    b = 1.
+    b = np.random.randn()
     _lambda = 2
     alpha = 0.01
     mb_size = 2

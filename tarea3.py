@@ -35,10 +35,12 @@ if __name__ == '__main__':
     parameters, X, y = parse_dataset(args.file_name)
     dimensions, _lambda, alpha, mb_size, epochs = parameters
 
-    w = np.ones(int(dimensions))
-    b = 1.
+    # w = np.ones(int(dimensions))
+    w = np.random.randn(int(dimensions))
+    # b = 1.
+    b = np.random.randn()
 
-    logger.LOG_LEVEL = ERROR  # DEBUG, INFO, ERROR
+    logger.LOG_LEVEL = INFO  # DEBUG, INFO, ERROR
 
     cg = ComputationalGraph()
     result, output_w, output_b = cg.gradient_descent(w, X, y, b, _lambda, alpha, int(mb_size), int(epochs))
