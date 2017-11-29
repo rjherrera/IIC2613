@@ -161,7 +161,7 @@ class ComputationalGraph:
                 self.backward(s)
                 w.value -= alpha * w.grad
                 b.value -= alpha * b.grad
-                log('\tStep %d:' % (j + 1), level=INFO)
+                log('\tMiniBatch %d:' % (j + 1), level=INFO)
                 log('\t\tFx =  %s' % s.value, level=INFO)
                 log('\t\tw = %s' % list(w.value), level=INFO)
                 log('\t\tb = %s' % b.value, level=INFO)
