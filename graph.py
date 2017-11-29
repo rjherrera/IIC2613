@@ -148,6 +148,10 @@ class ComputationalGraph:
 
         log('Initial:', objective_function(w, b, X, y, _lambda), level=ERROR)
         for i in range(epochs):
+            indexes = np.array([i for i in range(len(X))])
+            np.random.shuffle(indexes)
+            X = np.array([X[i] for i in indexes])
+            y = np.array([y[i] for i in indexes])
             log('Epoch %d:' % (i + 1), level=INFO)
             for j in range(len(X) // mb_size):
                 partial_X = X[j * mb_size: (j + 1) * mb_size]
