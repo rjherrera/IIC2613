@@ -102,7 +102,6 @@ class SumGate(Gate):
 
 class ComputationalGraph:
 
-
     def forward(self, w, X, y, b, _lambda):
         for i in range(len(self.hinge_gates)):
             gh1 = self.hinge_gates[i][0].forward(w, X[i])
@@ -165,7 +164,7 @@ class ComputationalGraph:
                 log('\t\tFx =  %s' % s.value, level=INFO)
                 log('\t\tw = %s' % list(w.value), level=INFO)
                 log('\t\tb = %s' % b.value, level=INFO)
-            log('  FX:', objective_function(w, b, X, y, _lambda), level=INFO)
+            log('  Objective Function:', objective_function(w, b, X, y, _lambda), level=INFO)
         return objective_function(w, b, X, y, _lambda), w.value, b.value
 
 
