@@ -6,18 +6,6 @@
 
 ---
 
-En este repositorio se te entregará:
+Recurrir al archivo de instrucciones [manual](MANUAL.md) para obtener mayor información de los archivos del repositorio, las decisiones de diseño, como utilizar el programa, como acceder a las características opcionales, y las librerías requeridas.
 
-* Enunciado Tarea 3
-
-Recuerden:
-
-* Pueden basarse en el [código disponible en el Syllabus](https://github.com/IIC2613/Syllabus/tree/master/Ejemplos) o desarrollar todo desde cero
-* La idea es que **hagan su propia implementación** (nada de citar código de otros lugares)
-* Respeten el formato del archivo de datos
-* Consideren que el nombre del archivo cambiará
-* Deben escribir un pequeño **manual** indicando cómo ejecutar la tarea y cómo interpretar el formato de *output*
-
----
-
-**Cuando el momento de la entrega llegue, se almacenará el último commit (en la branch `master`) y este se considerará la entrega final del alumno.**
+**Raimundo Herrera**

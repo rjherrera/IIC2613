@@ -1,6 +1,5 @@
 from argparse import ArgumentParser
 from graph import ComputationalGraph
-from matplotlib import pyplot as plt
 from utils import *
 import numpy as np
 import os
@@ -59,6 +58,7 @@ if __name__ == '__main__':
     log('---------- Summary ----------', level=ERROR)
 
     if SHOW_PLOT:
+        from matplotlib import pyplot as plt
         x_prev = np.linspace(4, 7, 100)
         y_prev = -(previous_w[0] * x_prev + b) / previous_w[1]
         plt.figure(1)
