@@ -30,7 +30,7 @@ def parse_dataset(file_name):
 
 if __name__ == '__main__':
     parser = ArgumentParser()
-    parser.add_argument('file_name', help='File with data, as described', nargs='?', default='../test2D.txt')
+    parser.add_argument('file_name', help='File with data, as described', nargs='?', default='test.txt')
     parser.add_argument('-plt', '--show_plot', action='store_true', help='Show plots, before and after gradient descent (Only works if 2D)')
     parser.add_argument('-l', '--log_level', default=INFO, help='Select log level to display information (0=Debug, 1=Normal, 2=Essentials)')
     args = parser.parse_args()
